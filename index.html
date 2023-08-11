@@ -9,7 +9,7 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="text/babel">
     const root = document.getElementById("root");
-    
+
     //컴포넌트의 첫 글자는 반드시 대문자
     /* const Button = () => (
         <button style={{ backgroundColor: "tomato" }} onClick={() => console.log("i'm clicked")}>Click me</button>
@@ -23,28 +23,88 @@
     ); */
 
     //const container = React.createElement("div", null, [Title, Button]);
-    
-    function App() {
-        //const data = React.useState(); : [undefined, function]  function은 data를 바꿀때 사용하는 함수.
-        const [counter, setCounter] = React.useState(0);  //데이터가 바뀔때마다 컴포넌트를 리렌더링하고 UI를 refresh함.
-        //const[myFavFood, mySecondFavFood] = food; == myFavFood = food[0];
-        const onClick = () =>{
 
-            //state를 설정해주는 방법
-            //1. 직접 값 설정
-            //setCounter(counter+1);
-            //2. 함수를 전달
-            setCounter((current) => current +1); //첫번째 argument = 현재값, return값이 새롱ㄴ state
-        };
-        return(
+    function MinutesToHours() {
+        const [amount, setAmount] = React.useState(0);
+        const [inverted, setInverted] = React.useState(false);
+        const onChange = (event) => {
+            setAmount(event.target.value); //target : 방금 바뀐input
+        }
+        const reset = () => setAmount(0);
+        const onFlip = () => {
+            reset();
+            setInverted(current => !current);
+        }
+        return (
             <div>
-                <h3>Total click : {counter} </h3>
-                <button onClick={onClick}>Click me</button>
+                <div>
+                    <label htmlFor="minutes">Minutes</label>
+                    <input
+                        value={inverted ? amount * 60 : amount}
+                        id="minutes"
+                        placeholder="Minutes"
+                        type="number"
+                        onChange={onChange}
+                        disabled={inverted} />
+                </div>
+                <div>
+                    <label htmlFor="hours">Hours</label>
+                    <input
+                        value={inverted ? amount : Math.round(amount / 60)}
+                        id="hours"
+                        placeholder="Hours"
+                        type="number"
+                        disabled={!inverted}
+                        onChange={onChange} />
+                    <button onClick={reset}>Reset</button>
+                    <button onClick={onFlip}>{inverted ? "Turn Back" : "Invert"}</button>
+                </div>
             </div>
         );
     }
 
-    ReactDOM.render(<App/>, root);
+    function KmToMiles() {
+        return (
+            <div>
+                <div>
+                    <lable htmlFor="km">Km</lable>
+                    <input
+                        id="km"
+                        placeholder="km"
+                        type="number"
+                        disabled="false" />
+                </div>
+                <div>
+                    <label for=""></label>
+                    <input type="number" id="" />
+                </div>
+                
+            </div>
+        );
+    }
+
+    function App() {
+        const [index, setIndex] = React.useState("xx");
+        const onSelect = (evnet) => {
+            setIndex(event.target.value);
+        }
+        return (
+            <div>
+                <h1>Super Convert </h1>
+                <select value={index} onChange={onSelect}>
+                    <option value="xx">Select your unit</option>
+                    <option value="0">Minutes $ Hours</option>
+                    <option value="1">Km & Miles</option>
+                </select>
+                <hr />
+                {index === "xx" ? "Please select your units" : null}
+                {index === "0" ? <MinutesToHours /> : null}
+                {index === "1" ? <KmToMiles /> : null}
+            </div>
+        );
+    }
+
+    ReactDOM.render(<App />, root);
     //ReactDOM.render(span, root);
 </script>
 
